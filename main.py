@@ -6,6 +6,10 @@ import tornado.web
 import tornado.websocket
 import datetime
 from tornado import gen
+import pifacedigitalio as p
+
+piface = p.PiFaceDigital()
+OUTPUT_PIN = 7
 
 from tornado.options import define, options
 define("port", default=8080, help="run on the given port", type=int)
@@ -24,8 +28,12 @@ class Counter():
             self.motor = False
         else:
             self.motor = True
+        if self.motor:
+            piface.output_pins[OUTPUT_PIN].value = 1
+        else:
+            piface.output_pins[OUTPUT_PIN].value = 1
         #print for debugging purposes. Comment this out when ready
-        print "Self count is %s and alpha is %s and motor is %s" %(self.count, alpha, self.motor) 
+        #print "Self count is %s and alpha is %s and motor is %s" %(self.count, alpha, self.motor)
 
 
 counter = Counter()
@@ -63,5 +71,5 @@ if __name__ == "__main__":
     print "Listening on port:", options.port
     main_loop = tornado.ioloop.IOLoop.instance()
     #main_loop.add_timeout(datetime.timedelta(seconds=2), test)
-    tornado.ioloop.PeriodicCallback(counter.increment, 100).start()
+    tornado.ioloop.PeriodicCallback(counter.increment, 1).start()
     main_loop.start()
