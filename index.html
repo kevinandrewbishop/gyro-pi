@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<!--please note I borrowed heavily from here: http://niltoid.com/blog/raspberry-pi-arduino-tornado/-->
+<html>
+  <head>
+    <style>
+      body { margin: 0px; padding: 0px; }
+      canvas { border: 1px solid #9C9898; }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  </head>
+  <body>
+    <p>Welcome!</p>
+    <h1 id="alpha">Alpha: 0</h1>
+    <div id="container"></div>
+  </body>
+  <script>
+    console.log("HelloTEST");
+
+    var socket = new WebSocket("ws://raspberrypi:8080/ws");
+
+    socket.onopen = function(){
+      console.log("connected");
+    };
+
+    socket.onmessage = function (message) {
+      console.log("receiving: " + message.data);
+    };
+
+    socket.onclose = function(){
+      console.log("disconnected");
+    };
+
+    sendMessage = function(message) {
+      socket.send(message);
+    };
+
+    var value = 0;
+
+//     $(document).ready(function(){
+    var counter = 0;
+    setInterval(function(){
+      if(window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', function(event) {
+                alpha = Math.round(event.alpha,1);
+                beta = Math.round(event.beta,1);
+                gamma = Math.round(event.gamma,1);
+
+        });
+        alpha = Math.abs(180-alpha)/360; //Force alpha to be between 0 and 0.5
+        $('#alpha').text('Alpha: ' + alpha);
+        //sendMessage(alpha);
+      };
+    }, 1000);
+//    });
+
+
+  </script>
+</html>
