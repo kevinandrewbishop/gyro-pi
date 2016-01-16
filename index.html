@@ -16,7 +16,7 @@
   <script>
     console.log("HelloTEST");
 
-    var socket = new WebSocket("ws://raspberrypi:8080/ws");
+    var socket = new WebSocket("ws://192.168.1.15:8080/ws");
 
     socket.onopen = function(){
       console.log("connected");
@@ -36,29 +36,29 @@
 
     var value = 0;
 
-     $(document).ready(function(){
-    var counter = 0;
-    setInterval(function(){
-      if(window.DeviceOrientationEvent) {
-        window.addEventListener('deviceorientation', function(event) {
-                alpha = Math.round(event.alpha,1);
-                beta = Math.round(event.beta,1);
-                gamma = Math.round(event.gamma,1);
-
-        });
-        alpha = Math.abs(180-alpha)/360; //Force alpha to be between 0 and 0.5
-        $('#alpha').text('Alpha: ' + alpha);
-	if (counter > 0){
-        try {
-		sendMessage(alpha);
-	} catch (error) {
-		console.log(error);
-	}
-	};
-	counter = counter + 1;
-      };
-    }, 1000);
-    });
+//     $(document).ready(function(){
+//    var counter = 0;
+//    setInterval(function(){
+//      if(window.DeviceOrientationEvent) {
+//        window.addEventListener('deviceorientation', function(event) {
+//                alpha = Math.round(event.alpha,1);
+//                beta = Math.round(event.beta,1);
+//                gamma = Math.round(event.gamma,1);
+//
+//        });
+//        alpha = Math.abs(180-alpha)/360; //Force alpha to be between 0 and 0.5
+//        $('#alpha').text('Alpha: ' + alpha);
+//	if (counter > 0){
+//        try {
+//		sendMessage(alpha);
+//	} catch (error) {
+//		console.log(error);
+//	}
+//	};
+//	counter = counter + 1;
+//      };
+//    }, 1000);
+//    });
 
 
   </script>
