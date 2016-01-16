@@ -16,7 +16,7 @@
   <script>
     console.log("HelloTEST");
 
-    var socket = new WebSocket("ws://raspberrypi:8080/ws");
+    var socket = new WebSocket("ws://192.168.1.15:8080/ws");
 
     socket.onopen = function(){
       console.log("connected");

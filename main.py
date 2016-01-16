@@ -50,7 +50,6 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def on_message(self, message):
         print 'message received %s' % message
         self.write_message('message received %s' % message)
-        self.alpha = int(message)
         global alpha
         alpha = float(message)
 
