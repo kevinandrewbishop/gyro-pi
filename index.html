@@ -9,13 +9,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   </head>
   <body>
-    <p>Welcome!</p>
-    <h1 id="alpha">Alpha: 0</h1>
-    <div id="container"></div>
+    <h1>Welcome!</h1>
+    <h2>Select a method of controlling the pi.</h2>
+    <button id="alpha">Alpha</button>
+    <button id="beta">Beta</button>
+    <button id="gamma">Gamma</button>
+    <button id="acceleration">Acceleration</button>
+    <h1 id="control_metric">Alpha: 0</h1>
+    <button id="kill">Kill Process</button>
   </body>
   <script>
-    console.log("HelloTEST");
-
     var socket = new WebSocket("ws://192.168.1.15:8080/ws");
 
     socket.onopen = function(){
@@ -34,30 +37,50 @@
       socket.send(message);
     };
 
-    var value = 0;
 
-     $(document).ready(function(){
-    var counter = 0;
-    setInterval(function(){
-      if(window.DeviceOrientationEvent) {
-        window.addEventListener('deviceorientation', function(event) {
-                alpha = Math.round(event.alpha,1);
-                beta = Math.round(event.beta,1);
-                gamma = Math.round(event.gamma,1);
+    $(document).ready(function(){
+      control_method = "alpha";
+      $('button').click(function(){
+        control_method = $(this).attr('id');
+      });
 
-        });
-        alpha = Math.abs(180-alpha)/180; //Force alpha to be between 0 and 1
-        $('#alpha').text('Alpha: ' + alpha);
-	if (counter > 0){
-        try {
-		sendMessage(alpha);
-	} catch (error) {
-		console.log(error);
-	}
-	};
-	counter = counter + 1;
-      };
-    }, 100);
+      window.addEventListener('deviceorientation', function(event) {
+        alpha = Math.round(event.alpha,1);
+        beta = Math.round(event.beta,1);
+        gamma = Math.round(event.gamma,1);
+      });
+
+      window.addEventListener('devicemotion', function(event) {
+              accelerationx = (event.acceleration.x).toFixed(1);
+              accelerationy = (event.acceleration.y).toFixed(1);
+              accelerationz = (event.acceleration.z).toFixed(1);
+              interval = (event.interval);
+      });
+
+      setInterval(function(){
+          alpha = Math.abs(180-alpha)/180; //Force alpha to be between 0 and 1
+          if (beta < 0){
+            beta = 0;
+          } else {beta = Math.abs(beta)/90};
+          gamma = (90 - Math.abs(gamma))/90;
+          acceleration = Math.abs(accelerationx) + Math.abs(accelerationy) + Math.abs(accelerationz);
+          acceleration = acceleration/18; //Acceleration has no bound, so I can't force it between 0 and 1
+          if (control_method === "alpha"){
+            sendMessage(alpha);
+            $('#control_metric').text('Alpha: ' + alpha);
+          } else if (control_method === "beta") {
+            sendMessage(beta);
+            $('#control_metric').text('Beta: ' + beta);
+          } else if (control_method === "gamma") {
+            sendMessage(gamma);
+            $('#control_metric').text('Gamma: ' + gamma);
+          } else if (control_method === 'acceleration'){
+            sendMessage(acceleration);
+            $('#control_metric').text('Acceleration: ' + acceleration);
+          } else {
+            sendMessage("kill");
+          }
+      }, 100);
     });
 
 
