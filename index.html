@@ -36,7 +36,7 @@
 
     var value = 0;
 
-//     $(document).ready(function(){
+     $(document).ready(function(){
     var counter = 0;
     setInterval(function(){
       if(window.DeviceOrientationEvent) {
@@ -48,10 +48,17 @@
         });
         alpha = Math.abs(180-alpha)/360; //Force alpha to be between 0 and 0.5
         $('#alpha').text('Alpha: ' + alpha);
-        //sendMessage(alpha);
+	if (counter > 0){
+        try {
+		sendMessage(alpha);
+	} catch (error) {
+		console.log(error);
+	}
+	};
+	counter = counter + 1;
       };
     }, 1000);
-//    });
+    });
 
 
   </script>

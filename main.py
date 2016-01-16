@@ -14,7 +14,7 @@ OUTPUT_PIN = 7
 from tornado.options import define, options
 define("port", default=8080, help="run on the given port", type=int)
 
-alpha = 50
+alpha = 0
 class Counter():
     def __init__(self):
         self.count = 0
@@ -22,18 +22,17 @@ class Counter():
 
     def increment(self):
         self.count += 1
-        if self.count > 20:
+        if self.count > 10:
             self.count = 1
-        if self.count/20 > alpha/100:
+        if self.count/10 > alpha:
             self.motor = False
         else:
             self.motor = True
         if self.motor:
             piface.output_pins[OUTPUT_PIN].value = 1
         else:
-            piface.output_pins[OUTPUT_PIN].value = 1
-        #print for debugging purposes. Comment this out when ready
-        #print "Self count is %s and alpha is %s and motor is %s" %(self.count, alpha, self.motor)
+            piface.output_pins[OUTPUT_PIN].value = 0
+        #print for debugging purposes. Comment this out when ready print Self count is %s and alpha is %s and motor is %s" %(self.count, alpha, self.motor)
 
 
 counter = Counter()
@@ -53,7 +52,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         self.write_message('message received %s' % message)
         self.alpha = int(message)
         global alpha
-        alpha = int(message)
+        alpha = float(message)
 
     def on_close(self):
         print 'connection closed'
@@ -71,5 +70,5 @@ if __name__ == "__main__":
     print "Listening on port:", options.port
     main_loop = tornado.ioloop.IOLoop.instance()
     #main_loop.add_timeout(datetime.timedelta(seconds=2), test)
-    tornado.ioloop.PeriodicCallback(counter.increment, 1).start()
+    tornado.ioloop.PeriodicCallback(counter.increment, 2).start()
     main_loop.start()
