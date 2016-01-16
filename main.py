@@ -54,7 +54,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         if message == 'kill':
             client_message = 0
             piface.output_pins[OUTPUT_PIN].value = 0
-        client_message = float(message)
+        else:
+	    client_message = float(message)
 
     def on_close(self):
         print 'connection closed'
