@@ -36,29 +36,29 @@
 
     var value = 0;
 
-//     $(document).ready(function(){
-//    var counter = 0;
-//    setInterval(function(){
-//      if(window.DeviceOrientationEvent) {
-//        window.addEventListener('deviceorientation', function(event) {
-//                alpha = Math.round(event.alpha,1);
-//                beta = Math.round(event.beta,1);
-//                gamma = Math.round(event.gamma,1);
-//
-//        });
-//        alpha = Math.abs(180-alpha)/360; //Force alpha to be between 0 and 0.5
-//        $('#alpha').text('Alpha: ' + alpha);
-//	if (counter > 0){
-//        try {
-//		sendMessage(alpha);
-//	} catch (error) {
-//		console.log(error);
-//	}
-//	};
-//	counter = counter + 1;
-//      };
-//    }, 1000);
-//    });
+     $(document).ready(function(){
+    var counter = 0;
+    setInterval(function(){
+      if(window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', function(event) {
+                alpha = Math.round(event.alpha,1);
+                beta = Math.round(event.beta,1);
+                gamma = Math.round(event.gamma,1);
+
+        });
+        alpha = Math.abs(180-alpha)/180; //Force alpha to be between 0 and 1
+        $('#alpha').text('Alpha: ' + alpha);
+	if (counter > 0){
+        try {
+		sendMessage(alpha);
+	} catch (error) {
+		console.log(error);
+	}
+	};
+	counter = counter + 1;
+      };
+    }, 100);
+    });
 
 
   </script>
