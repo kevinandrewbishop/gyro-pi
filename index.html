@@ -45,9 +45,9 @@
       });
 
       window.addEventListener('deviceorientation', function(event) {
-        alpha = Math.round(event.alpha,1);
-        beta = Math.round(event.beta,1);
-        gamma = Math.round(event.gamma,1);
+        alpha = (event.alpha).toFixed(1);
+        beta = (event.beta).toFixed(1);
+        gamma = (event.gamma).toFixed(1);
       });
 
       window.addEventListener('devicemotion', function(event) {
@@ -64,21 +64,22 @@
           } else {beta = Math.abs(beta)/90};
           gamma = (90 - Math.abs(gamma))/90;
           acceleration = Math.abs(accelerationx) + Math.abs(accelerationy) + Math.abs(accelerationz);
-          acceleration = acceleration/18; //Acceleration has no bound, so I can't force it between 0 and 1
+          acceleration = acceleration/50; //Acceleration has no bound, so I can't force it between 0 and 1
           if (control_method === "alpha"){
             sendMessage(alpha);
-            $('#control_metric').text('Alpha: ' + alpha);
+            $('#control_metric').text('Alpha: ' + alpha.toFixed(1));
           } else if (control_method === "beta") {
             sendMessage(beta);
-            $('#control_metric').text('Beta: ' + beta);
+            $('#control_metric').text('Beta: ' + beta.toFixed(1));
           } else if (control_method === "gamma") {
             sendMessage(gamma);
-            $('#control_metric').text('Gamma: ' + gamma);
+            $('#control_metric').text('Gamma: ' + gamma.toFixed(1));
           } else if (control_method === 'acceleration'){
             sendMessage(acceleration);
-            $('#control_metric').text('Acceleration: ' + acceleration);
+            $('#control_metric').text('Acceleration: ' + acceleration.toFixed(1));
           } else {
             sendMessage("kill");
+	    $('#control_metric').text('Process Killed.');
           }
       }, 100);
     });
